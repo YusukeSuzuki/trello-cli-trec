@@ -1,1 +1,1 @@
-APP_NAME = 'trello-py'
+APP_NAME = 'trec'
