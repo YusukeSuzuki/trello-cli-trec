@@ -42,6 +42,9 @@ def main():
   args.api_key = config.get('default', 'api_key')
   args.api_token = config.get('default', 'api_token')
 
+  if not args.api_key or not args.api_token:
+    commands.auth.process(args)
+
   return args.process(args)
 
 if __name__ == '__main__':

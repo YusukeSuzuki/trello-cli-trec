@@ -2,12 +2,11 @@
 
 ## auth
 
+```bash
+trec auth # Then follow the instructions.
 ```
-# ~/.config/trec/config.ini
-[default]
-api_key = API_KEY
-api_token = API_TOKEN
-```
+
+Alternatively, the instruction can also be started simply by attempting to execute a subcommand without being authenticated.
 
 ## basic usage
 
