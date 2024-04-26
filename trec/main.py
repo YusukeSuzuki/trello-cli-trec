@@ -35,8 +35,6 @@ def main():
   parser = create_root_argument_parser()
   args = parser.parse_args()
 
-  #print(args)
-
   if not vars(args).get('process'):
     parser.print_help()
     return 0
