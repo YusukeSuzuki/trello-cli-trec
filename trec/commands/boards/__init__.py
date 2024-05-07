@@ -8,6 +8,13 @@ import yaml
 import trec
 import trec.common as common
 
+from . import create
+
+
+sub_commands = [
+  create
+  ]
+
 
 def name():
   return 'boards'
