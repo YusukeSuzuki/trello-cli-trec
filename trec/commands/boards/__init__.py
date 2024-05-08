@@ -6,7 +6,7 @@ import requests
 import yaml
 
 import trec
-import trec.common as common
+import trec.utils.common as common
 
 from . import create
 

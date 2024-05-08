@@ -5,7 +5,7 @@ from pprint import pprint as print
 
 import appdirs
 
-from .common import APP_NAME
+from .utils.common import APP_NAME
 from . import commands 
 from .utils.argparse import add_sub_commands_from_module
 

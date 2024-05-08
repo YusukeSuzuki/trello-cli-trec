@@ -4,7 +4,7 @@ import json
 
 import appdirs
 
-import trec.common as common
+import trec.utils.common as common
 import trec.api as api
 
 

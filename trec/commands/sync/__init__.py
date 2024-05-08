@@ -5,7 +5,6 @@ import appdirs
 import requests
 import yaml
 
-import trec.common as common
 import trec.data as data
 
 def name():

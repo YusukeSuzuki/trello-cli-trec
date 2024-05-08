@@ -4,7 +4,7 @@ from pathlib import Path
 
 import appdirs
 
-import trec.common as common
+import trec.utils.common as common
 
 def name():
   return 'auth'
