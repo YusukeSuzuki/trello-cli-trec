@@ -6,6 +6,7 @@ import requests
 import yaml
 
 import trec.common as common
+import trec.data as data
 
 def name():
   return 'sync'
@@ -18,29 +19,13 @@ def implement(parser):
     help='dump synced data into stdout')
 
 def process(args):
-  url = 'https://api.trello.com/1/members/me/organizations'
+  db = data.db.load(**vars(args))
 
-  headers = { 'Accept': 'application/json' }
-  query = { 'key': args.api_key, 'token': args.api_token }
-  response = requests.request('GET', url, headers=headers, params=query)
-  organizations = response.json()
-
-  for organization in organizations:
-    organization_id = organization['id']
-    url = f'https://api.trello.com/1/organizations/{organization_id}/boards'
-    response = requests.request('GET', url, headers=headers,
-      params={ 'lists': 'all', **query })
-    boards = response.json()
-
-    organization['boards'] = boards
-
-  data_dir_path = Path(appdirs.user_data_dir(common.APP_NAME))
-  data_dir_path.mkdir(exist_ok=True, parents=True)
-  data_file_path = data_dir_path / 'data.json'
-
-  with data_file_path.open('w') as f:
-    f.write(json.dumps(organizations))
+  if db is None:
+    db = data.db.setup(**vars(args))
+  else:
+    db = data.db.update(db, **vars(args))
 
   if args.dump:
     from pprint import pprint as pp
-    pp(organizations)
+    pp(db)
