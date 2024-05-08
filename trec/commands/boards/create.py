@@ -3,6 +3,8 @@ from functools import reduce
 import requests
 import yaml
 
+import trec.api as api
+
 
 def name():
   return 'create'
@@ -21,16 +23,5 @@ def implement(parser):
 
 
 def process(args):
-  headers = { 'Accept': 'application/json' }
-  query = { 'key': args.api_key, 'token': args.api_token,  }
-
-  url = 'https://api.trello.com/1/boards'
-  detailed_query = {
-    'name': args.name,
-    'lists': 'open',
-    **query
-    }
-  if args.description is not None:
-    detailed_query.update({ 'desc': args.description })
-  response = requests.request('POST', url, headers=headers, params=detailed_query)
-  print(yaml.dump(response.json(), allow_unicode=True))
+  created_board = api.boards.create(**vars(args))
+  print(yaml.dump(created_board, allow_unicode=True))
