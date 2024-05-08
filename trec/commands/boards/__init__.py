@@ -9,10 +9,12 @@ import trec
 import trec.utils.common as common
 
 from . import create
+from . import show
 
 
 sub_commands = [
-  create
+  create,
+  show
   ]
 
 

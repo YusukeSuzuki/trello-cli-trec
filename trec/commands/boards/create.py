@@ -19,7 +19,7 @@ def implement(parser):
     help='target workspace workspace. default is first found workspace')
   parser.add_argument('--description', type=str, required=False,
     help='name of card')
-  parser.add_argument('name', help='name of card')
+  parser.add_argument('name', help='name of board')
 
 
 def process(args):
