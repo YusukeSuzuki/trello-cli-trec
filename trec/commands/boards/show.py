@@ -31,7 +31,13 @@ def process(args):
     query = f"[].boards[]"
 
   if not args.full:
-    query += ".{name: name, id: id, dateLastActivity: dateLastActivity}"
+    query += ('''
+      .{
+        name: name, id: id,
+        dateLastActivity: dateLastActivity,
+        lists: lists[].{name: name, id: id}
+      }
+      ''')
 
   boards = jmespath.search(query, db)
 

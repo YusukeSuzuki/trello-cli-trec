@@ -3,6 +3,7 @@ import requests
 import yaml
 
 from . import create
+from . import move
 
 import trec.api as api
 import trec.data as data
@@ -10,7 +11,8 @@ import trec.utils.trello as trello_util
 
 
 sub_commands = [
-  create
+  create,
+  move
   ]
 
 

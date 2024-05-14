@@ -14,4 +14,5 @@ def add_sub_commands_from_module(base_parser, module):
     if vars(sub_command).get('process'):
       sub_parser.set_defaults(process=sub_command.process)
     else:
-      sub_parser.set_defaults(process=lambda args: sub_parser.print_help())
+      sub_parser.set_defaults(
+        process=lambda args, _cur_parser=sub_parser: _cur_parser.print_help())

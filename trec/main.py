@@ -9,6 +9,7 @@ from .utils.common import APP_NAME
 from . import commands 
 from .utils.argparse import add_sub_commands_from_module
 
+
 def create_root_argument_parser():
   parser = ArgumentParser(APP_NAME)
   add_sub_commands_from_module(parser, commands)
