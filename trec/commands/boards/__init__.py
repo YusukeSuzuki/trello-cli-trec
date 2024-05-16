@@ -31,6 +31,7 @@ def implement(parser):
 
 
 def process(args):
+  # TODO: use data module
   data_file_path = Path(appdirs.user_data_dir(common.APP_NAME)) / 'data.json'
 
   if not data_file_path.exists():
@@ -40,11 +41,12 @@ def process(args):
   with data_file_path.open() as f:
     db = json.load(f)
 
+  # TODO: use jmespath
   filtered_organizations = []
 
   for organization in db:
     boards = [
-      {k: board.get(k) for k in ('name', 'id')} for board in organization['boards']]
+      f'{board["id"]} {board["name"]}' for board in organization['boards']]
     filtered_organizations.append({
       **{k: organization.get(k) for k in ('displayName', 'id')},
       'boards': boards,

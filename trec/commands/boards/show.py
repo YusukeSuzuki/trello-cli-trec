@@ -5,7 +5,8 @@ import jmespath
 
 import trec.data as data
 import trec.utils.trello as trello_util
-
+from trec.utils.api_keys import from_args as keys_from
+from trec.utils.jmespath import options as jmespath_options
 
 def name():
   return 'show'
@@ -21,27 +22,24 @@ def implement(parser):
 
 
 def process(args):
-  db = data.db.load_or_setup(**vars(args))
+  db = data.db.load_or_setup(**keys_from(args))
 
   id_query_parameter = trello_util.from_id_notation_to_query(args.name)
 
   if id_query_parameter is None:
     query = f"[].boards[?name=='{args.name}'][]"
   else:
-    query = f"[].boards[]"
+    query = f"[].boards[?fnmatch(id, '{id_query_parameter}')]"
 
   if not args.full:
     query += ('''
       .{
         name: name, id: id,
         dateLastActivity: dateLastActivity,
-        lists: lists[].{name: name, id: id}
+        lists: lists[].join(' ', [to_string(id), name]) 
       }
       ''')
 
-  boards = jmespath.search(query, db)
-
-  if id_query_parameter is not None:
-    boards = list(filter(lambda x: not not re.match(id_query_parameter, x['id']), boards))
+  boards = jmespath.search(query, db, options=jmespath_options)
 
   print(yaml.dump(boards, allow_unicode=True, sort_keys=False))

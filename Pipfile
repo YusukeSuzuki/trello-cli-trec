@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 pyyaml = "*"
 jmespath = "*"
+argcomplete = "*"
+rich = "*"
 
 [dev-packages]
 

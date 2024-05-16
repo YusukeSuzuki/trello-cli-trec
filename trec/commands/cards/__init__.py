@@ -1,5 +1,9 @@
+from rich.console import Console
+from rich.panel import Panel
+from rich.syntax import Syntax
+from rich.text import Text
+from rich.tree import Tree
 import jmespath
-import requests
 import yaml
 
 from . import create
@@ -8,6 +12,8 @@ from . import move
 import trec.api as api
 import trec.data as data
 import trec.utils.trello as trello_util
+from trec.utils.api_keys import from_args as keys_from
+from trec.utils.jmespath import options as jmespath_options
 
 
 sub_commands = [
@@ -19,41 +25,46 @@ sub_commands = [
 def name():
   return 'cards'
 
+
 def help():
   return 'card operations, if no subcommand, list all cards'
 
+
 def implement(parser):
-  parser.add_argument('--board', '-b', default=None,
+  parser.add_argument('--in', dest='in_', default='*.*.*',
     help='specify board of cards to list up. name or trello id (wildcard available).')
-  # TODO: add list option
-  # TODO: add target option (The --target option cannot be used together with the --board or --list options.)
+  parser.add_argument('--dump', action='store_true', help='dump yaml into stdout')
+
 
 def process(args):
-  db = data.db.load_or_setup(**vars(args))
+  db = data.db.load_or_setup(**keys_from(args))
 
-  board_id_query_parameter = (
-    trello_util.from_id_notation_to_query(args.board) if args.board is not None else None)
+  list_query_string = trello_util.query_for_list(args.in_)
+  lists = jmespath.search(list_query_string, db, options=jmespath_options)
 
-  if args.board is not None and board_id_query_parameter is None:
-    query = f"[].boards[?name=='{args.board}'][]"
-  else:
-    query = f"[].boards[]"
+  filtered_lists = []
 
-  boards = jmespath.search(query, db)
-  filtered_boards = []
-
-  if board_id_query_parameter is not None:
-    boards = list(filter(lambda x: not not re.match(board_id_query_parameter, x['id']), boards))
-
-  for board in boards:
-    board = {k: board.get(k) for k in ('name', 'id')}
-
-    cards = api.boards.cards(board['id'], **vars(args))
-    board['cards'] = [{k: card.get(k) for k in ('name', 'id')} for card in cards]
-
-    if not board['cards']:
+  for card_list in lists:
+    card_list = {key: card_list.get(key) for key in ('trecName', 'id')}
+    cards = api.lists.cards(card_list['id'], **keys_from(args))
+    if not cards:
       continue
+    card_list['cards'] = [{k: card.get(k) for k in ('name', 'id')} for card in cards]
+    filtered_lists.append(card_list)
 
-    filtered_boards.append(board)
-  
-  print(yaml.dump(filtered_boards, allow_unicode=True, sort_keys=False))
+  if args.dump:
+    print(yaml.dump(filtered_lists, allow_unicode=True, sort_keys=False))
+  else:
+    console = Console()
+
+    for card_list in filtered_lists:
+      text = Text()
+      text.append(f'list {card_list["id"]}\n', style='bold yellow')
+      text.append(f'Name: {card_list["trecName"]}\n')
+      text.append('\n')
+
+      for card in card_list['cards']:
+        text.append(f'  {card["id"]}: ', style='bold')
+        text.append(f'"{card["name"]}"\n')
+
+      console.print(text)

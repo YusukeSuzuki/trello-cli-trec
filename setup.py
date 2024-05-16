@@ -12,8 +12,10 @@ setup(
       ]
     },
   install_requires=[
-    'requests',
     'appdirs',
+    'argcomplete',
     'jmespath',
+    'requests',
+    'rich',
     ],
   )

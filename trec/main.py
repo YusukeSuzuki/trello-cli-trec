@@ -1,9 +1,11 @@
+# PYTHON_ARGCOMPLETE_OK
 from argparse import ArgumentParser
 from configparser import ConfigParser
 from pathlib import Path
 from pprint import pprint as print
 
 import appdirs
+import argcomplete
 
 from .utils.common import APP_NAME
 from . import commands 
@@ -34,6 +36,7 @@ def main():
 
 
   parser = create_root_argument_parser()
+  argcomplete.autocomplete(parser)
   args = parser.parse_args()
 
   if not vars(args).get('process'):
