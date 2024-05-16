@@ -11,5 +11,5 @@ Alternatively, the instruction can also be started simply by attempting to execu
 ## basic usage
 
 ```bash
-trec cards create myboard.todo_list "Write more detailed README.md"
+trec cards create --in todo.myboard "Write more detailed README.md"
 ```
