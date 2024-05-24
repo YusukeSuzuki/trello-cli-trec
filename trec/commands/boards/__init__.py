@@ -6,7 +6,8 @@ import requests
 import yaml
 
 import trec
-import trec.utils.common as common
+import trec.data as data
+from trec.utils.api_keys import from_args as keys_from
 
 from . import create
 from . import show
@@ -31,15 +32,7 @@ def implement(parser):
 
 
 def process(args):
-  # TODO: use data module
-  data_file_path = Path(appdirs.user_data_dir(common.APP_NAME)) / 'data.json'
-
-  if not data_file_path.exists():
-    args.dump = False
-    trec.commands.sync.process(args)
-
-  with data_file_path.open() as f:
-    db = json.load(f)
+  db = data.db.load_or_setup(**keys_from(args))
 
   # TODO: use jmespath
   filtered_organizations = []
