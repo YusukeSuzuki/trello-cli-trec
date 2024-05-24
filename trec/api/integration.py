@@ -46,7 +46,7 @@ def download_db_with_cache(
       cached_boards = (
         [b for b in cached_org['boards'] if b['id'] == board['id']] if cached_org else [])
       if cached_boards and cached_boards[0]['dateLastActivity'] == board['dateLastActivity']:
-        boards[board_idx] = cached_boards
+        boards[board_idx] = cached_boards[0]
         continue
       cached_board = cached_boards[0] if cached_boards else None
 
