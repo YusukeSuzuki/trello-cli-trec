@@ -14,7 +14,7 @@ def from_id_notation_to_query(arg: str) -> Optional[str]:
   return None
 
 
-def query_for_list(arg: str, *, sub_trec_name: str='*.*.*') -> str:
+def query_for_list(arg: str, exclude: str='\n\t\n\t', *, sub_trec_name: str='*.*.*') -> str:
   if not arg:
     raise ValueError('empty arg cannot be list query string')
 
@@ -28,15 +28,19 @@ def query_for_list(arg: str, *, sub_trec_name: str='*.*.*') -> str:
     raise ValueError(
       f'invalid sub trec name (should be like listA.boardB.workspaceC): {sub_trec_name}')
 
-  splitted_arg = list(map(lambda x: x or '*', arg.split('.')))
+  def _make_name(param: str) -> str:
+    splitted_param = list(map(lambda x: x or '*', param.split('.')))
 
-  names = splitted_arg + splitted_sub_trec_name[len(splitted_arg):]
+    names = splitted_param + splitted_sub_trec_name[len(splitted_param):]
 
-  if len(names) != 3:
-    raise ValueError(f'invalid arg for list query string: {arg}')
+    if len(names) != 3:
+      raise ValueError(f'invalid param for list query string: {param}')
 
-  trello_name = '.'.join(names)
-  return f"[].boards[].lists[?fnmatch(trecName, '{trello_name}')][]"
+    return '.'.join(names)
+
+  in_name, ex_name = [_make_name(param) for param in (arg, exclude)]
+
+  return f"[].boards[].lists[?fnmatch(trecName, '{in_name}') && !fnmatch(trecName, '{ex_name}')][]"
 
 
 def query_for_card(arg: str) -> str:

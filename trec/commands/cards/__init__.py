@@ -33,13 +33,15 @@ def help():
 def implement(parser):
   parser.add_argument('--in', dest='in_', default='*.*.*',
     help='specify board of cards to list up. name or trello id (wildcard available).')
+  parser.add_argument('--exclude', default='\n\t\n\t',
+    help='specify board to exclude from list. name or trello id (wildcard available).')
   parser.add_argument('--dump', action='store_true', help='dump yaml into stdout')
 
 
 def process(args):
   db = data.db.load_or_setup(**keys_from(args))
 
-  list_query_string = trello_util.query_for_list(args.in_)
+  list_query_string = trello_util.query_for_list(args.in_, args.exclude)
   lists = jmespath.search(list_query_string, db, options=jmespath_options)
 
   filtered_lists = []

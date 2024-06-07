@@ -43,6 +43,8 @@ def main():
     parser.print_help()
     return 0
 
+  args.check_args(parser, args)
+
   args.api_key = config.get('default', 'api_key')
   args.api_token = config.get('default', 'api_token')
 
