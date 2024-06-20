@@ -31,9 +31,9 @@ def help():
 
 
 def implement(parser):
-  parser.add_argument('--in', dest='in_', default='*.*.*',
+  parser.add_argument('--in', '-i', dest='in_', default='*.*.*',
     help='specify board of cards to list up. name or trello id (wildcard available).')
-  parser.add_argument('--exclude', default='\n\t\n\t',
+  parser.add_argument('--exclude', '-e', default='\n\t\n\t',
     help='specify board to exclude from list. name or trello id (wildcard available).')
   parser.add_argument('--dump', action='store_true', help='dump yaml into stdout')
 

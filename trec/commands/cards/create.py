@@ -17,7 +17,7 @@ def help():
 
 
 def implement(parser):
-  parser.add_argument('--in', dest='in_', type=str, required=True,
+  parser.add_argument('--in', '-i', dest='in_', type=str, required=True,
     help='list.board.workspace or list.board notation, or trello id')
   parser.add_argument('name', help='name of card')
   parser.add_argument('--dump', action='store_true', help='dump data into stdout')

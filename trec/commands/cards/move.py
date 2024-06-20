@@ -18,7 +18,7 @@ def help():
 
 
 def implement(parser):
-  parser.add_argument('--in', dest='in_', type=str, default='*.*.*', required=False,
+  parser.add_argument('--in', '-i', dest='in_', type=str, default='*.*.*', required=False,
     help='list name where card currently in')
   parser.add_argument('--dump', action='store_true', help='dump data into stdout')
   parser.add_argument('name', help='name of card')

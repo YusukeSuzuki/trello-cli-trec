@@ -17,7 +17,7 @@ def help():
 
 
 def implement(parser):
-  parser.add_argument('--in', dest='in_', type=str, required=False, default=None,
+  parser.add_argument('--in', '-i', dest='in_', type=str, required=False, default=None,
     help='workspace name or id where boards should be in. default is first found workspace')
   parser.add_argument('--description', type=str, required=False, default=None,
     help='description of board')
