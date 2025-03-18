@@ -15,6 +15,7 @@ setup(
     'appdirs',
     'argcomplete',
     'jmespath',
+    'pyyaml',
     'requests',
     'rich',
     ],
